@@ -3,3 +3,17 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: 'create-drop'
+
+application:
+  security:
+    jwt:
+      secret-key: frX/+dnZMZhNQ8v4SzqxqFPQrdinpieFv7gwefK/V8s=
+      expiration: 86400000 # a day in milliseconds
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
