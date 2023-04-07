@@ -14,7 +14,11 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.With;
 import org.hibernate.Hibernate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +29,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @With
-public class ApplicationUser {
+public class ApplicationUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
@@ -34,13 +38,15 @@ public class ApplicationUser {
 
 
     @Column(unique = true)
-    private String name;
+    private String username;
 
     private Integer age;
 
     @OneToMany(mappedBy = "applicationUser")
     @ToString.Exclude
-    private List<Article> articles;
+    private transient List<Article> articles;
+
+    private String password;
 
     @Override
     public boolean equals(Object o) {
@@ -55,4 +61,28 @@ public class ApplicationUser {
         return getClass().hashCode();
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
